@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace KPL_Modul6_103022300014
 {
@@ -10,15 +11,26 @@ namespace KPL_Modul6_103022300014
 
         public SayaTubeVideo(string title)
         {
+            if (title == null || title.Length >200 )
+                throw new ArgumentException("Judul video tidak boleh null dan maksimal 200 karakter.");
+
             Random rand = new Random();
             this.id = rand.Next(10000, 99999);
             this.title = title;
             this.playCount = 0;
-        }
+        }   
 
         public void IncreasePlayCount(int playCount)
         {
-            this.playCount += playCount;
+            Debug.Assert(playCount >= 0, "input playcout tidak boleh negatif");
+            Debug.Assert(playCount <= 250000000, "penambahan playcount tidak boleh leboh dari 250000000");
+            try
+            {
+                this.playCount += playCount;
+            }
+            catch (OverflowException e){
+                Console.WriteLine("Error: Play count melebihi batas maksimum integer!");        
+            }
         }
 
         public void PrintVideoDetails()
@@ -64,6 +76,7 @@ namespace KPL_Modul6_103022300014
 
         public void AddVideo(SayaTubeVideo video)
         {
+            Debug.Assert(video != null, "tidak boleh null");
             uploadedVideos.Add(video);
         }
         public void PrintAllVideoPlaycount()
